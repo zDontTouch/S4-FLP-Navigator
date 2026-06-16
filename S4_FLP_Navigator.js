@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     FLP Quick Navigator for SAP S/4HANA Cloud Public Edition
-// @version  0.2
+// @version  1.0
 // @grant    none
 // @include /https://.*-adm.s4hana.cloud.sap/adm.*/
 // @include /https://.*-adm.s4hana.sapcloud.cn/adm.*/
@@ -118,7 +118,7 @@ document.addEventListener("mousedown",(e)=>{
   var tenantUiUrl = tenantURL.split("/adm")[0];
   
     //FLP nav buttons (include the # in case it was not added in the settings
-  if(e.target.id.toString().startsWith("FLPNavButton") || e.ctrlKey == true){
+  if(e.target.id.toString().startsWith("FLPNavButton") && e.ctrlKey == true){
     try{
         if(document.getElementById("navButtonsDiv").style.display != "none" ){
             document.getElementById("navButtonsDiv").style.display = "none";
@@ -203,7 +203,7 @@ document.addEventListener("mousedown",(e)=>{
         var settingsDiv = document.createElement("div");
         settingsDiv.setAttribute("id","NavigatorSettingsDiv");
         settingsDiv.setAttribute("style","position:absolute; width:500px; height:300px; right:0px; top:25px; padding:0px 10px; background-color:white; border-style:solid; border-color:rgb(188, 195, 202); border-radius:8px;");
-        settingsDiv.innerHTML = "<h3 align=\"center\">Custom Navigation Button Setup<button id=\"NavigatorSettingHelpButton\" style=\""+fioriButtonStyle+" margin-left:10px;\">?</button></h3><table><tr><th>#</th><th>Visibility</th><th>Label</th><th>Navigation Tag</th></tr>"+nav1Settings+nav2Settings+nav3Settings+nav4Settings+nav5Settings+nav6Settings+"</table><button id=\"NavigatorSettingSave\" style=\""+fioriButtonStyle+" padding:5px 15px;\">Save</button>"
+        settingsDiv.innerHTML = "<h3 align=\"center\">Custom Navigation Button Setup<button id=\"NavigatorSettingHelpButton\" style=\""+fioriButtonStyle+" margin-left:10px;\">?</button></h3><table><tr><th>#</th><th>Visibility</th><th>Label</th><th>Navigation Tag</th></tr>"+nav1Settings+nav2Settings+nav3Settings+nav4Settings+nav5Settings+nav6Settings+"</table><button id=\"NavigatorSettingSave\" style=\""+fioriButtonStyle+" padding:5px 15px;\">Save</button><span style=\"position:absolute; bottom:5px; right: 5px;\">v1.0</span>"
         document.getElementById("NavigatorSettings").appendChild(settingsDiv);
     }
   }else if(e.target.id == "NavigatorSettingHelpButton"){
@@ -212,7 +212,7 @@ document.addEventListener("mousedown",(e)=>{
     var helpPopupDiv = document.createElement("div");
         helpPopupDiv.setAttribute("id","helpPopup");
         helpPopupDiv.setAttribute("style","position:absolute; width:420px; height:480px; right:0px; background-color:white; align:left; padding:7px; border-style:solid; border-color:rgb(188, 195, 202); border-radius:8px; z-index:99;");
-        helpPopupDiv.innerHTML = "<span style=\"color:black;\"><div align=\"center\"><h3>How to Use the FLP Navigator</h3></div><div align=\"left\">In S/4Hana Cloud, apps can be accessed by appending a \"navigation tag\" at the end of the tenant URL (for example, accessing \"<i>tenant url</i>   / ui<b><span style=\"text-decoration: underline;\">#DataMigration-manage</span></b>\" redirects the S/4Hana Cloud UI directly to the Migration Cockpit app).<br>This tool allows you to configure buttons to quickly navigate to an app, skipping the need to open the Home Page first. <br>When operating the system backend through this page, you can use the 👁 button to quickly toggle the visibility of all buttons (so it does not block the visibility of any screen element).<br><br>You can also toggle the visibility of the buttons by holding the <span style=\"text-decoration: underline;\">Ctrl</span> key and clicking the area where the buttons are.<br><br><h3>How to setup:</h3>1. Get the navigation tag for the desired app (you can check this by manually opening the app once and copying the tag from the browser URL)<br>2. In this configuration menu, set a label/nickname for a navigation button in the Name field<br>3. Paste the navigation tag in the Navigation Tag field (the '#' character itself is not needed)<br>4. Use the checkboxes under the \"Visibility\" column to control which buttons you want to actually display<br>5. Click the Save button and reload the page (F5)</div></span>";
+        helpPopupDiv.innerHTML = "<span style=\"color:black;\"><div align=\"center\"><h3>How to Use the FLP Navigator</h3></div><div align=\"left\">In S/4Hana Cloud, apps can be accessed by appending a \"navigation tag\" at the end of the tenant URL (for example, accessing \"<i>tenant url</i>   / ui<b><span style=\"text-decoration: underline;\">#DataMigration-manage</span></b>\" redirects the S/4Hana Cloud UI directly to the Migration Cockpit app).<br>This tool allows you to configure buttons to quickly navigate to an app, skipping the need to open the Home Page first. <br>When operating the system backend through this page, you can use the 👁 button to quickly toggle the visibility of all buttons (so it does not block the visibility of any screen element).<br><br>You can also hide the buttons by holding the <span style=\"text-decoration: underline;\">Ctrl</span> key and clicking the area where the buttons are.<br><br><h3>How to setup:</h3>1. Get the navigation tag for the desired app (you can check this by manually opening the app once and copying the tag from the browser URL)<br>2. In this configuration menu, set a label/nickname for a navigation button in the Name field<br>3. Paste the navigation tag in the Navigation Tag field (the '#' character itself is not needed)<br>4. Use the checkboxes under the \"Visibility\" column to control which buttons you want to actually display<br>5. Click the Save button and reload the page (F5)</div></span>";
         try{
             document.getElementById("NavigatorSettingHelpButton").appendChild(helpPopupDiv);
         }catch(err){}
@@ -233,12 +233,12 @@ document.addEventListener("mousedown",(e)=>{
     //IDs from the settings fields, should not close the settings popup
   }else if(e.target.id == "NavigatorSettingSave"){
     //save button
-    var saveString = document.getElementById("navBtnStt1Vsb").checked+"||"+document.getElementById("navBtnStt1Name").value+"||"+document.getElementById("navBtnStt1Tag").value;
-    saveString = saveString + "█" + document.getElementById("navBtnStt2Vsb").checked+"||"+document.getElementById("navBtnStt2Name").value+"||"+document.getElementById("navBtnStt2Tag").value;
-    saveString = saveString + "█" + document.getElementById("navBtnStt3Vsb").checked+"||"+document.getElementById("navBtnStt3Name").value+"||"+document.getElementById("navBtnStt3Tag").value;
-    saveString = saveString + "█" + document.getElementById("navBtnStt4Vsb").checked+"||"+document.getElementById("navBtnStt4Name").value+"||"+document.getElementById("navBtnStt4Tag").value;
-    saveString = saveString + "█" + document.getElementById("navBtnStt5Vsb").checked+"||"+document.getElementById("navBtnStt5Name").value+"||"+document.getElementById("navBtnStt5Tag").value;
-    saveString = saveString + "█" + document.getElementById("navBtnStt6Vsb").checked+"||"+document.getElementById("navBtnStt6Name").value+"||"+document.getElementById("navBtnStt6Tag").value;
+    var saveString = document.getElementById("navBtnStt1Vsb").checked+"||"+document.getElementById("navBtnStt1Name").value+"||"+document.getElementById("navBtnStt1Tag").value.toString().trim();
+    saveString = saveString + "█" + document.getElementById("navBtnStt2Vsb").checked+"||"+document.getElementById("navBtnStt2Name").value+"||"+document.getElementById("navBtnStt2Tag").value.toString().trim();
+    saveString = saveString + "█" + document.getElementById("navBtnStt3Vsb").checked+"||"+document.getElementById("navBtnStt3Name").value+"||"+document.getElementById("navBtnStt3Tag").value.toString().trim();
+    saveString = saveString + "█" + document.getElementById("navBtnStt4Vsb").checked+"||"+document.getElementById("navBtnStt4Name").value+"||"+document.getElementById("navBtnStt4Tag").value.toString().trim();
+    saveString = saveString + "█" + document.getElementById("navBtnStt5Vsb").checked+"||"+document.getElementById("navBtnStt5Name").value+"||"+document.getElementById("navBtnStt5Tag").value.toString().trim();
+    saveString = saveString + "█" + document.getElementById("navBtnStt6Vsb").checked+"||"+document.getElementById("navBtnStt6Name").value+"||"+document.getElementById("navBtnStt6Tag").value.toString().trim();
     GM_setValue("FLP_Navigator_Settings",saveString);
 
     var saveSuccessMessage = document.createElement("p");
